@@ -532,6 +532,8 @@
     <div class="music-toggle" id="musicBtn"><i class="fas fa-music"></i></div>
     <audio id="bgMusic" loop>
         <source src="lover.mp3" type="audio/mpeg">
+        <!-- Fallback source that sounds romantic if the file isn't there -->
+        <source src="https://cdn.pixabay.com/download/audio/2023/05/16/audio_4966779422.mp3?filename=romantic-piano-150654.mp3" type="audio/mpeg">
     </audio>
 
     <button class="nav-btn prev-btn" id="prevBtn" onclick="moveSlide(-1)"><i class="fas fa-arrow-left"></i></button>
@@ -923,6 +925,7 @@
         // Music
         const musicBtn = document.getElementById('musicBtn');
         const audio = document.getElementById('bgMusic');
+        audio.volume = 0.3; // Set volume to 30% background level
         let playing = false;
         
         musicBtn.addEventListener('click', () => {
