@@ -530,7 +530,7 @@
     <!-- Controls -->
     <div class="music-label">Lover by Taylor Swift 💗</div>
     <div class="music-toggle" id="musicBtn"><i class="fas fa-music"></i></div>
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop autoplay>
         <source src="lover.mp3" type="audio/mpeg">
         <!-- Fallback source that sounds romantic if the file isn't there -->
         <source src="https://cdn.pixabay.com/download/audio/2023/05/16/audio_4966779422.mp3?filename=romantic-piano-150654.mp3" type="audio/mpeg">
@@ -925,15 +925,29 @@
         // Music
         const musicBtn = document.getElementById('musicBtn');
         const audio = document.getElementById('bgMusic');
-        audio.volume = 0.3; // Set volume to 30% background level
+        audio.volume = 0.6; // Updated to 60%
         let playing = false;
+        
+        // Attempt autoplay on load
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                playing = true;
+                musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            })
+            .catch(error => {
+                console.log("Autoplay prevented. User interaction needed.");
+                playing = false;
+                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+            });
+        }
         
         musicBtn.addEventListener('click', () => {
             if(playing) {
                 audio.pause();
                 musicBtn.innerHTML = '<i class="fas fa-music"></i>';
             } else {
-                audio.play().catch(e => console.log("Audio interaction needed"));
+                audio.play();
                 musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
             playing = !playing;
