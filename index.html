@@ -5,78 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 1st Month!</title>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- [EDITABLE] Color Palette & Settings --- */
+        /* --- [THEME SETTINGS] --- */
         :root {
-            --primary-color: #d46a6a;       
-            --secondary-color: #5a4a42;     
-            --bg-gradient-start: #fff1eb;   
-            --bg-gradient-end: #ace0f9;     
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --slide-transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+            --primary: #e66b6b;
+            --primary-dark: #c24d4d;
+            --text-main: #4a4a4a;
+            --text-light: #7a7a7a;
+            --bg-glass: rgba(255, 255, 255, 0.65);
+            --border-glass: rgba(255, 255, 255, 0.8);
+            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+            --font-script: 'Dancing Script', cursive;
         }
 
-        /* --- Reset & Basic Setup --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; 
-            color: var(--secondary-color);
-            overflow: hidden; /* Prevent default scrolling */
+            font-family: var(--font-body);
+            color: var(--text-main);
+            overflow: hidden;
             height: 100vh;
             width: 100vw;
+            background: #ffe6e6; /* Fallback */
         }
 
+        /* --- DYNAMIC BACKGROUND --- */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+        }
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* --- Floating Hearts Animation Background --- */
-        .heart-bg {
+        /* Floating Orbs for extra aesthetic depth */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: floatOrb 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+        .orb-1 { width: 300px; height: 300px; background: #fff1eb; top: -50px; left: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #accbee; bottom: -100px; right: -100px; animation-delay: -5s; }
+        
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Background Floating Hearts */
+        .bg-hearts-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
         }
-        .floating-heart {
+        .bg-heart {
             position: absolute;
-            bottom: -10vh;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 20px;
-            animation: floatUp linear infinite;
-            text-shadow: 0 0 5px rgba(255, 192, 203, 0.5);
+            bottom: -50px;
+            animation: floatUpHeart linear forwards;
         }
-        @keyframes floatUp {
+        @keyframes floatUpHeart {
             0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
-        /* --- SLIDER STRUCTURE --- */
+        /* --- SLIDER SYSTEM --- */
         .slider-viewport {
             width: 100vw;
             height: 100vh;
             overflow: hidden;
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
         
         .slider-track {
             display: flex;
             height: 100%;
-            width: 600vw; /* 6 Slides total (Removed one) */
-            transition: var(--slide-transition);
+            width: 700vw; /* 7 Slides */
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .slide {
@@ -87,382 +111,581 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
-            overflow-y: auto; /* Allow internal scrolling for small screens */
         }
 
-        /* Inner container for slide content */
-        .slide-content {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 30px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            padding: 40px;
+        /* Glass Card Container */
+        .card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-glass);
+            border-radius: 40px;
+            padding: 50px;
             width: 100%;
             max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
             text-align: center;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
-            scrollbar-width: thin; /* Firefox */
+            transform: scale(0.95) translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            scrollbar-width: none;
+        }
+        .card::-webkit-scrollbar { display: none; }
+
+        .slide.active .card {
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
-        /* Active slide animation */
-        .slide.active .slide-content {
+        /* Staggered Content Animation */
+        .stagger-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .slide.active .stagger-in {
             opacity: 1;
             transform: translateY(0);
         }
+        .slide.active .stagger-in:nth-child(1) { transition-delay: 0.1s; }
+        .slide.active .stagger-in:nth-child(2) { transition-delay: 0.2s; }
+        .slide.active .stagger-in:nth-child(3) { transition-delay: 0.3s; }
+        .slide.active .stagger-in:nth-child(4) { transition-delay: 0.4s; }
 
-        /* --- Typography --- */
-        h1, h2, h3 {
-            font-family: 'Dancing Script', cursive;
-            color: var(--primary-color);
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1.1;
         }
-        h1 { font-size: 4rem; margin-bottom: 10px; text-shadow: 2px 2px 0px rgba(255,255,255,0.8); }
-        h2 { font-size: 2.5rem; margin-bottom: 20px; }
-        h3 { font-size: 1.8rem; margin-bottom: 15px; }
-        p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; }
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 3px;
+            background: var(--primary);
+            margin: 5px auto 0;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+        .accent-text {
+            font-family: var(--font-script);
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
 
-        /* --- Custom UI Elements --- */
-        
-        /* 1. Photo Grid */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        /* --- COMPONENTS --- */
+
+        /* 1. 3D Photo Gallery */
+        .gallery-container {
+            display: flex;
+            justify-content: center;
             gap: 20px;
-            padding: 10px;
+            flex-wrap: wrap;
+            perspective: 1000px;
+            padding: 20px 0;
         }
         .polaroid {
             background: white;
-            padding: 10px 10px 35px 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: rotate(var(--rotation));
-            transition: all 0.3s;
+            padding: 12px 12px 40px 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 220px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            /* Gentle float animation */
+            animation: gentleHover 4s ease-in-out infinite;
         }
-        .polaroid:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 10; }
-        .polaroid img { width: 100%; height: 200px; object-fit: cover; }
-        .polaroid-caption { font-family: 'Dancing Script'; font-size: 1.4rem; color: #555; margin-top: 10px; }
+        @keyframes gentleHover {
+            0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+            50% { transform: translateY(-10px) rotate(var(--rot)); }
+        }
+        .polaroid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            animation: none; /* Stop floating when hovered */
+        }
+        
+        .polaroid:nth-child(1) { --rot: -3deg; animation-delay: 0s; }
+        .polaroid:nth-child(2) { --rot: 2deg; animation-delay: 1s; }
+        .polaroid:nth-child(3) { --rot: -2deg; animation-delay: 2s; }
 
-        /* 2. Interactive Love Meter */
-        .love-meter-wrapper {
+        /* 2. Modern Love Meter */
+        .meter-container {
+            width: 100px;
+            height: 300px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50px;
+            margin: 0 auto 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid white;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .meter-fill {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 10%; /* Start low */
+            background: linear-gradient(to top, #ff758c 0%, #ff7eb3 100%);
+            transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50% 50% 0 0;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(230, 107, 107, 0.4);
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(230, 107, 107, 0.6); }
+        .btn:active { transform: translateY(1px); }
+
+        /* 3. Interactive Quiz */
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .quiz-card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .quiz-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .quiz-card.correct { border-color: #4cd137; background: #eaffea; color: #4cd137; }
+        .quiz-card.wrong { border-color: #e84118; background: #ffeaea; color: #e84118; animation: shake 0.5s; }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* 4. Reasons Grid */
+        .reasons-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .reason-box {
+            background: white;
+            padding: 20px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
         }
-        .heart-container {
-            width: 150px;
-            height: 150px;
-            background: #eee;
-            position: relative;
-            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>") no-repeat center;
-            -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>") no-repeat center;
-            mask-size: contain;
-            -webkit-mask-size: contain;
-        }
-        .heart-fill {
-            width: 100%;
-            height: 0%;
-            background: linear-gradient(to top, #ff416c, #ff4b2b);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            transition: height 0.2s ease;
-        }
-        .meter-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(212, 106, 106, 0.4);
-            transition: transform 0.1s;
-        }
-        .meter-btn:active { transform: scale(0.95); }
+        .reason-box:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .reason-icon { font-size: 2.5rem; transition: transform 0.3s; }
+        .reason-box:hover .reason-icon { transform: scale(1.2); }
+        .reason-text { font-size: 0.95rem; font-weight: 600; color: #666; }
 
-        /* 3. Date Generator */
-        .date-card {
+        /* 5. Date Generator */
+        .date-spinner-container {
             background: white;
             padding: 30px;
-            border-radius: 20px;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            position: relative; /* Needed for absolute positioning of maybe-popup */
+            border-radius: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative; /* For popup positioning */
         }
-        #date-result { font-size: 1.3rem; font-weight: bold; color: #5a4a42; min-height: 60px; display: flex; align-items: center; justify-content: center;}
-        
-        /* Popup for Date Generator */
+        #date-display {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* POPUP RESTORED */
         .maybe-popup {
             position: absolute;
             top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             background: rgba(255, 255, 255, 0.95);
-            padding: 15px 25px;
-            border: 2px solid var(--primary-color);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 10;
-            color: var(--primary-color);
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 20;
+            color: var(--primary);
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             pointer-events: none;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             white-space: nowrap;
         }
         .maybe-popup.show {
-            transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -80px) scale(1); /* Popped up slightly higher */
+            opacity: 1;
         }
 
-        /* 4. Reasons Grid */
-        .reasons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-        }
-        .reason-card {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-        .reason-card:hover { transform: translateY(-5px); }
-
-        /* 5. Letter */
-        .letter-content {
-            font-family: 'Sacramento', cursive;
-            font-size: 1.6rem; /* Slightly smaller to fit longer text */
-            line-height: 1.5;
-            color: #444;
-            white-space: pre-wrap;
-            min-height: 200px;
+        /* 6. Bucket List (NEW) */
+        .bucket-list {
             text-align: left;
-            padding: 20px;
-            background: #fffcf8;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .bucket-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .bucket-item:last-child { border-bottom: none; }
+        .bucket-item:hover { background: #f9f9f9; }
+        .checkbox {
+            width: 20px; height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background 0.2s;
+        }
+        .bucket-item.checked .checkbox { background: var(--primary); }
+        .bucket-item.checked span { text-decoration: line-through; color: #ccc; }
+
+        /* 7. Letter Paper */
+        .letter-paper {
+            background: #fffcf5;
+            padding: 40px;
+            text-align: left;
             border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+            max-height: 50vh;
+            overflow-y: auto;
+            border: 1px solid #f0e6d2;
+            position: relative;
+        }
+        /* Lined paper effect */
+        .letter-paper {
+            background-image: linear-gradient(#eee 1px, transparent 1px);
+            background-size: 100% 2em;
+            line-height: 2em;
         }
 
-        /* --- Navigation Controls --- */
+        /* --- CONTROLS --- */
         .nav-btn {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            background: white;
-            color: var(--primary-color);
-            border: none;
-            width: 50px;
-            height: 50px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+            color: var(--primary);
+            border: 1px solid white;
+            width: 50px; height: 50px;
             border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             cursor: pointer;
             z-index: 100;
             font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s;
         }
-        .nav-btn:hover { background: var(--primary-color); color: white; transform: translateY(-50%) scale(1.1); }
-        .prev-btn { left: 20px; }
-        .next-btn { right: 20px; }
-        .nav-btn:disabled { opacity: 0.5; cursor: default; }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-50%) scale(1.15); }
+        .prev-btn { left: 25px; }
+        .next-btn { right: 25px; }
+        .nav-btn:disabled { opacity: 0; pointer-events: none; }
 
-        .pagination {
+        .progress-dots {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: 12px;
             z-index: 100;
         }
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px; height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.6);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s;
         }
-        .dot.active { background: white; transform: scale(1.2); }
+        .dot.active { background: var(--primary); border-color: var(--primary); transform: scale(1.3); }
 
-        /* --- Music Control --- */
-        .music-control {
+        .music-toggle {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            width: 40px;
-            height: 40px;
+            top: 30px; right: 30px;
+            width: 45px; height: 45px;
             border-radius: 50%;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             cursor: pointer;
-            z-index: 101;
+            z-index: 200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+        .music-toggle:hover { transform: rotate(15deg) scale(1.1); }
+        
+        /* New Aesthetic Music Label */
+        .music-label {
+            position: fixed;
+            top: 38px;
+            right: 90px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            z-index: 200;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+            pointer-events: none;
+            opacity: 0.9;
         }
 
-        /* Responsive */
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-            h1 { font-size: 2.8rem; }
-            .nav-btn { width: 40px; height: 40px; }
-            .slide { padding: 15px; }
-            .slide-content { padding: 25px; }
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .card { padding: 30px 20px; }
+            .polaroid { width: 140px; }
+            .polaroid img { height: 140px; }
+            .prev-btn, .next-btn { width: 40px; height: 40px; font-size: 1rem; }
+            .nav-btn { top: auto; bottom: 80px; transform: translateY(0); } /* Move nav buttons to bottom on mobile */
+            .prev-btn { left: 30px; }
+            .next-btn { right: 30px; }
+            
+            /* Hide music label on very small screens if it overlaps, or adjust size */
+            .music-label { font-size: 1.1rem; right: 85px; top: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Elements -->
-    <div class="heart-bg" id="heart-bg"></div>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    <!-- Floating Hearts Layer -->
+    <div class="bg-hearts-container" id="bgHearts"></div>
+
+    <!-- Canvas for Confetti -->
     <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
 
-    <!-- Music Control -->
-    <div class="music-control" id="musicBtn" title="Play Music">🎵</div>
+    <!-- Controls -->
+    <div class="music-label">Lover by Taylor Swift 💗</div>
+    <div class="music-toggle" id="musicBtn"><i class="fas fa-music"></i></div>
     <audio id="bgMusic" loop>
-        <source src="" type="audio/mpeg">
+        <source src="lover.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Navigation -->
-    <button class="nav-btn prev-btn" id="prevBtn" onclick="moveSlide(-1)">❮</button>
-    <button class="nav-btn next-btn" id="nextBtn" onclick="moveSlide(1)">❯</button>
-    <div class="pagination" id="pagination"></div>
+    <button class="nav-btn prev-btn" id="prevBtn" onclick="moveSlide(-1)"><i class="fas fa-arrow-left"></i></button>
+    <button class="nav-btn next-btn" id="nextBtn" onclick="moveSlide(1)"><i class="fas fa-arrow-right"></i></button>
+    <div class="progress-dots" id="dotsContainer"></div>
 
-    <!-- MAIN SLIDER -->
+    <!-- SLIDER -->
     <div class="slider-viewport">
         <div class="slider-track" id="track">
-            
+
             <!-- SLIDE 1: INTRO -->
             <div class="slide active">
-                <div class="slide-content">
-                    <h1>Happy 1st Month!</h1>
-                    <p style="font-size: 1.4rem; color: #5a4a42;">
-                        30 Days.<br>720 Hours.<br>43,200 Minutes.
-                    </p>
-                    <p>And every single second has been better because you were in it. ❤️</p>
-                    <div style="margin-top:20px; font-size: 3rem;">💑</div>
-                    <p style="font-size: 0.9rem; margin-top: 20px; opacity: 0.7;">(Use the arrows or swipe to explore)</p>
+                <div class="card">
+                    <h1 class="stagger-in">Happy 1st Month!</h1>
+                    <p class="accent-text stagger-in" style="margin-top: 20px;">30 Days of Us</p>
+                    <div class="stagger-in" style="font-size: 4rem; margin: 30px 0; animation: pulse 2s infinite;">❤️</div>
+                    <p class="stagger-in">Every moment with you is my favorite memory.<br>Let's celebrate our first milestone.</p>
                 </div>
             </div>
 
-            <!-- SLIDE 2: PHOTO GALLERY (RENAMED) -->
+            <!-- SLIDE 2: GALLERY -->
             <div class="slide">
-                <div class="slide-content">
-                    <h2>Gallery</h2>
-                    <div class="photo-grid">
-                        <!-- [EDITABLE] Images - Removed Captions as requested -->
-                        <div class="polaroid" style="--rotation: -3deg;">
-                            <img src="1.jpg" alt="Memory 1">
-                            <div class="polaroid-caption"></div>
+                <div class="card">
+                    <h2 class="stagger-in">Our Memories</h2>
+                    <p class="stagger-in">Just a glimpse of my favorite view.</p>
+                    <div class="gallery-container stagger-in">
+                        <div class="polaroid">
+                            <img src="1.jpg" alt="Us 1">
                         </div>
-                        <div class="polaroid" style="--rotation: 2deg;">
-                            <img src="2.jpg" alt="Memory 2">
-                            <div class="polaroid-caption"></div>
+                        <div class="polaroid">
+                            <img src="2.jpg" alt="Us 2">
                         </div>
-                        <div class="polaroid" style="--rotation: -2deg;">
-                            <img src="3.jpg" alt="Memory 3">
-                            <div class="polaroid-caption"></div>
+                        <div class="polaroid">
+                            <img src="3.jpg" alt="Us 3">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 3: LOVE METER GAME -->
+            <!-- SLIDE 3: LOVE METER -->
             <div class="slide">
-                <div class="slide-content">
-                    <h2>Love Meter ❤️</h2>
-                    <p>How much do I love you? Keep tapping to find out!</p>
+                <div class="card">
+                    <h2 class="stagger-in">Love Level</h2>
+                    <p class="stagger-in">Fill up the heart! 👇</p>
+                    <div class="meter-container stagger-in">
+                        <div class="meter-fill" id="meterFill"></div>
+                    </div>
+                    <div class="stagger-in">
+                        <h3 id="loveText" style="margin-bottom: 15px; color: var(--primary);">0%</h3>
+                        <button class="btn" id="fillBtn">Boost Love</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: FUN & GAMES -->
+            <div class="slide">
+                <div class="card">
+                    <h2 class="stagger-in">Fun & Games</h2>
                     
-                    <div class="love-meter-wrapper">
-                        <div class="heart-container">
-                            <div class="heart-fill" id="heartFill"></div>
+                    <!-- Date Spinner -->
+                    <div class="stagger-in">
+                        <p style="font-weight:bold; margin-bottom: 5px;">Next Date Idea?</p>
+                        <div class="date-spinner-container">
+                            <div id="date-display">🎲 Spin to Decide!</div>
+                            <!-- RESTORED POPUP -->
+                            <div id="maybe-msg" class="maybe-popup">Maybe... one day! ✈️😅</div>
                         </div>
-                        <h3 id="lovePercent">0%</h3>
-                        <button class="meter-btn" id="pumpBtn">Tap Me! 👇</button>
+                        <button class="btn" style="padding: 8px 25px; font-size: 0.9rem;" onclick="spinDate()">Spin</button>
+                    </div>
+
+                    <div style="margin: 30px 0; height: 1px; background: rgba(0,0,0,0.1);"></div>
+
+                    <!-- Interactive Quiz -->
+                    <div class="stagger-in">
+                        <p style="font-weight:bold;">Do you know my favorite food?</p>
+                        <div class="quiz-options">
+                            <div class="quiz-card" onclick="checkAnswer(this, false)">Momos</div>
+                            <div class="quiz-card" onclick="checkAnswer(this, false)">Samyang</div>
+                            <div class="quiz-card" onclick="checkAnswer(this, true)">Mama Noodles + Wai Wai</div>
+                            <div class="quiz-card" onclick="checkAnswer(this, false)">KFC</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 4: QUIZ & DATE GENERATOR -->
+            <!-- SLIDE 5: BUCKET LIST (NEW) -->
             <div class="slide">
-                <div class="slide-content">
-                    <h2>Fun & Games</h2>
+                <div class="card">
+                    <h2 class="stagger-in">Our Bucket List</h2>
+                    <p class="stagger-in">Things I can't wait to do with you.</p>
                     
-                    <!-- Date Generator -->
-                    <div class="date-card">
-                        <h3>Next Date Idea? 🎲</h3>
-                        <p>Can't decide what to do? Let fate decide!</p>
-                        <div id="date-result">❓</div>
-                        <div id="maybe-msg" class="maybe-popup">Maybe... one day! ✈️😅</div>
-                        <button class="meter-btn" onclick="generateDate()" style="padding: 10px 20px; font-size: 1rem;">Spin!</button>
-                    </div>
-
-                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">
-
-                    <!-- Mini Quiz -->
-                    <div style="text-align: left;">
-                        <h3>Mini Quiz: Do you know me?</h3>
-                        <p style="margin-bottom: 5px;">What is my favorite food?</p>
-                        <select id="quiz-food" style="padding: 5px; width: 100%; margin-bottom: 10px;">
-                            <option>Select...</option>
-                            <option value="wrong">Momos</option>
-                            <option value="wrong">Samyang</option>
-                            <option value="wrong">KFC</option>
-                            <option value="correct">Mama Noodles with Wai Wai</option>
-                        </select>
-                        <button class="meter-btn" onclick="checkQuiz()" style="padding: 5px 15px; font-size: 0.9rem;">Check</button>
-                        <span id="quiz-msg" style="margin-left: 10px; font-weight: bold;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 5: REASONS WHY -->
-            <div class="slide">
-                <div class="slide-content">
-                    <h2>Why I Love You</h2>
-                    <div class="reasons-grid">
-                        <div class="reason-card">
-                            <div style="font-size:2rem">🥰</div>
-                            <p>Your beautiful smile</p>
+                    <div class="bucket-list stagger-in">
+                        <!-- Editable Items -->
+                        <div class="bucket-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"><i class="fas fa-check" style="font-size: 0.7rem;"></i></div>
+                            <span>Go on a road trip 🚗</span>
                         </div>
-                        <div class="reason-card">
-                            <div style="font-size:2rem">🤣</div>
-                            <p>The way you laugh</p>
+                        <div class="bucket-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"><i class="fas fa-check" style="font-size: 0.7rem;"></i></div>
+                            <span>Watch the sunrise together 🌅</span>
                         </div>
-                        <div class="reason-card">
-                            <div style="font-size:2rem">🛡️</div>
-                            <p>I feel safe with you</p>
+                        <div class="bucket-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"><i class="fas fa-check" style="font-size: 0.7rem;"></i></div>
+                            <span>Cook a chaotic dinner 🍝</span>
                         </div>
-                        <div class="reason-card">
-                            <div style="font-size:2rem">🎮</div>
-                            <p>You're my player 2</p>
+                        <div class="bucket-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"><i class="fas fa-check" style="font-size: 0.7rem;"></i></div>
+                            <span>adopt a cat (maybe) 🐱</span>
                         </div>
-                        <div class="reason-card">
-                            <div style="font-size:2rem">🍕</div>
-                            <p>We share food</p>
-                        </div>
-                        <div class="reason-card">
-                            <div style="font-size:2rem">✨</div>
-                            <p>You are simply you</p>
+                        <div class="bucket-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"><i class="fas fa-check" style="font-size: 0.7rem;"></i></div>
+                            <span>Travel to Japan 🇯🇵</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 6: LETTER -->
+            <!-- SLIDE 6: REASONS -->
             <div class="slide">
-                <div class="slide-content">
-                    <h2>A Letter For You 💌</h2>
-                    <div class="letter-content" id="typewriter-text"></div>
-                    <button class="meter-btn" id="startTypeBtn" style="margin-top: 20px;">Read Letter</button>
+                <div class="card">
+                    <h2 class="stagger-in">Why I Love You</h2>
+                    <div class="reasons-wrapper stagger-in">
+                        <div class="reason-box">
+                            <span class="reason-icon">🥰</span>
+                            <span class="reason-text">Your Smile</span>
+                        </div>
+                        <div class="reason-box">
+                            <span class="reason-icon">🗣️</span>
+                            <span class="reason-text">Your Yapping</span>
+                        </div>
+                        <div class="reason-box">
+                            <span class="reason-icon">🤣</span>
+                            <span class="reason-text">Your Humor</span>
+                        </div>
+                        <div class="reason-box">
+                            <span class="reason-icon">👀</span>
+                            <span class="reason-text">Your Eyes 😍</span>
+                        </div>
+                        <div class="reason-box">
+                            <span class="reason-icon">🧪</span>
+                            <span class="reason-text">Our Chemistry</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: LETTER -->
+            <div class="slide">
+                <div class="card">
+                    <h2 class="stagger-in">My Letter to You</h2>
+                    <div class="letter-paper stagger-in" id="letterContainer">
+                        <!-- Content injected via JS for typing effect -->
+                    </div>
+                    <button class="btn stagger-in" id="readBtn" style="margin-top: 20px;">Open Letter</button>
                 </div>
             </div>
 
@@ -470,37 +693,36 @@
     </div>
 
     <script>
-        // --- 1. GLOBAL SETTINGS ---
-        // UPDATED: Reduced from 7 to 6 since we removed one slide
-        const totalSlides = 6;
+        // --- CONFIGURATION ---
+        const totalSlides = 7; // Increased due to Bucket List
         let currentSlide = 0;
         const track = document.getElementById('track');
-        const pagination = document.getElementById('pagination');
+        const dotsContainer = document.getElementById('dotsContainer');
         const slides = document.querySelectorAll('.slide');
 
-        // --- 2. SLIDER LOGIC ---
-        // Create Dots
+        // --- SLIDER ENGINE ---
+        // Generate Dots
         for(let i=0; i<totalSlides; i++) {
             const dot = document.createElement('div');
             dot.classList.add('dot');
             if(i===0) dot.classList.add('active');
-            dot.onclick = () => goToSlide(i);
-            pagination.appendChild(dot);
+            dot.onclick = () => goTo(i);
+            dotsContainer.appendChild(dot);
         }
         const dots = document.querySelectorAll('.dot');
 
-        function updateSlide() {
+        function updateUI() {
+            // Move Track
             track.style.transform = `translateX(-${currentSlide * 100}vw)`;
             
-            // Update Active Class for animations
+            // Activate Classes
             slides.forEach(s => s.classList.remove('active'));
             slides[currentSlide].classList.add('active');
-
-            // Update Dots
+            
             dots.forEach(d => d.classList.remove('active'));
             dots[currentSlide].classList.add('active');
 
-            // Disable buttons at ends
+            // Button State
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
         }
@@ -508,212 +730,211 @@
         function moveSlide(dir) {
             if (dir === 1 && currentSlide < totalSlides - 1) currentSlide++;
             else if (dir === -1 && currentSlide > 0) currentSlide--;
-            updateSlide();
+            updateUI();
         }
 
-        function goToSlide(index) {
+        function goTo(index) {
             currentSlide = index;
-            updateSlide();
+            updateUI();
         }
 
-        // Keyboard Nav
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') moveSlide(1);
-            if (e.key === 'ArrowLeft') moveSlide(-1);
+            if(e.key === 'ArrowRight') moveSlide(1);
+            if(e.key === 'ArrowLeft') moveSlide(-1);
         });
 
         // Initialize
-        updateSlide();
+        updateUI();
 
-        // --- 3. LOVE METER GAME ---
-        let loveLevel = 0;
-        const heartFill = document.getElementById('heartFill');
-        const lovePercent = document.getElementById('lovePercent');
-        const pumpBtn = document.getElementById('pumpBtn');
 
-        pumpBtn.addEventListener('click', () => {
-            if (loveLevel >= 100) return;
-            
-            loveLevel += Math.floor(Math.random() * 15) + 5; // Add 5-20%
-            if (loveLevel > 100) loveLevel = 100;
-            
-            heartFill.style.height = `${loveLevel}%`;
-            lovePercent.innerText = `${loveLevel}%`;
+        // --- FEATURES ---
 
-            createFloatingEmoji(pumpBtn);
-
-            if (loveLevel === 100) {
-                lovePercent.innerText = "MAX LOVE! ❤️";
-                pumpBtn.innerText = "YAY! 🎉";
-                fireConfetti();
-                fireConfetti();
-            }
-        });
-
-        function createFloatingEmoji(target) {
-            const emojis = ['❤️', '💖', '😍', '🥰', '😘'];
-            const el = document.createElement('div');
-            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            el.style.position = 'absolute';
-            el.style.left = target.getBoundingClientRect().left + (target.offsetWidth/2) + 'px';
-            el.style.top = target.getBoundingClientRect().top + 'px';
-            el.style.fontSize = '24px';
-            el.style.pointerEvents = 'none';
-            el.style.transition = 'all 1s ease-out';
-            el.style.zIndex = '1000';
-            document.body.appendChild(el);
-
-            setTimeout(() => {
-                el.style.transform = `translate(${Math.random()*40 - 20}px, -100px) scale(1.5)`;
-                el.style.opacity = '0';
-            }, 50);
-
-            setTimeout(() => el.remove(), 1000);
-        }
-
-        // --- 4. DATE IDEA GENERATOR ---
-        const dateIdeas = [
-            "Movie Marathon Night 🍿",
-            "Picnic in the Park 🧺",
-            "Cook a new recipe together 🍝",
-            "Stargazing 🌌",
-            "Karaoke Night 🎤",
-            "Visit a Museum 🏛️",
-            "Sunset Walk 🌅",
-            "Build a Blanket Fort 🏰"
-        ];
-        function generateDate() {
-            const result = document.getElementById('date-result');
-            let count = 0;
-            const interval = setInterval(() => {
-                result.innerText = dateIdeas[Math.floor(Math.random() * dateIdeas.length)];
-                count++;
-                if(count > 10) {
-                    clearInterval(interval);
-                    result.style.color = "#d46a6a";
-                    result.style.transform = "scale(1.2)";
-                    setTimeout(() => result.style.transform = "scale(1)", 200);
-                    
-                    // Show Maybe Popup
-                    setTimeout(() => {
-                        const popup = document.getElementById('maybe-msg');
-                        popup.classList.add('show');
-                        setTimeout(() => popup.classList.remove('show'), 2500); // Hide after 2.5s
-                    }, 500);
-                }
-            }, 100);
-        }
-
-        // --- 5. QUIZ LOGIC ---
-        function checkQuiz() {
-            const val = document.getElementById('quiz-food').value;
-            const msg = document.getElementById('quiz-msg');
-            if(val === 'correct') {
-                msg.innerText = "Correct! You know me so well! 😘";
-                msg.style.color = "green";
-                fireConfetti();
-            } else if (val === 'wrong') {
-                msg.innerText = "Oops! Try again! 😅";
-                msg.style.color = "red";
-            }
-        }
-
-        // --- 6. TYPEWRITER ---
-        // UPDATED LETTER TEXT with "Tenzing Jangsel" and longer content
-        const letterText = `My Dearest,\n\nI can’t believe it’s already been a month since we started this journey. It feels like I’ve known you forever, yet every day I learn something new and beautiful about you.\n\nThank you for being you. Thank you for the late-night talks, the laughter that hurts my stomach, and for making even the ordinary moments feel extraordinary. You have brought so much light into my life in such a short time.\n\nEven when we are apart, you are always in my thoughts. I cherish every memory we've made so far, and I am so excited for all the memories we have yet to create.\n\nHere's to us, to this past month, and to many, many more.\n\nHappy 1st Monthsary!\n\nAlways yours,\nTenzing Jangsel`;
+        // 1. Love Meter
+        let loveVal = 10;
+        const meterFill = document.getElementById('meterFill');
+        const loveText = document.getElementById('loveText');
         
-        const typeBtn = document.getElementById('startTypeBtn');
-        const typeDest = document.getElementById('typewriter-text');
-        let typing = false;
-
-        typeBtn.addEventListener('click', () => {
-            if(typing) return;
-            typing = true;
-            typeBtn.style.display = 'none';
-            let i = 0;
-            function type() {
-                if (i < letterText.length) {
-                    typeDest.innerHTML += letterText.charAt(i) === '\n' ? '<br>' : letterText.charAt(i);
-                    i++;
-                    setTimeout(type, 50);
+        document.getElementById('fillBtn').addEventListener('click', () => {
+            if(loveVal < 100) {
+                loveVal += Math.floor(Math.random() * 15) + 10;
+                if(loveVal > 100) loveVal = 100;
+                meterFill.style.height = loveVal + '%';
+                loveText.innerText = loveVal + '%';
+                
+                if(loveVal === 100) {
+                    loveText.innerText = "❤️ 100% - MAX LOVE! ❤️";
+                    triggerConfetti();
                 }
             }
-            type();
         });
 
-        // --- 7. BACKGROUND EFFECTS ---
-        // Floating Hearts
-        function createBgHeart() {
+        // 2. Date Spinner
+        const ideas = ["Movie Night 🎬", "Picnic 🧺", "Stargazing 🌌", "Arcade Date 👾", "Cooking Together 🍝", "Late Night Drive 🚗"];
+        let spinLock = false;
+        function spinDate() {
+            if(spinLock) return;
+            spinLock = true;
+            const display = document.getElementById('date-display');
+            const popup = document.getElementById('maybe-msg');
+            
+            // Reset popup if it's visible
+            popup.classList.remove('show');
+
+            let counter = 0;
+            const interval = setInterval(() => {
+                display.innerText = ideas[Math.floor(Math.random() * ideas.length)];
+                counter++;
+                if(counter > 15) {
+                    clearInterval(interval);
+                    spinLock = false;
+                    display.style.color = "#e66b6b";
+                    display.style.transform = "scale(1.2)";
+                    setTimeout(() => display.style.transform = "scale(1)", 300);
+                    
+                    // Show Popup after spin logic!
+                    setTimeout(() => {
+                        popup.classList.add('show');
+                        setTimeout(() => popup.classList.remove('show'), 3000); // Hide after 3s
+                    }, 400);
+                }
+            }, 80);
+        }
+
+        // 3. Quiz
+        function checkAnswer(el, isCorrect) {
+            // Reset siblings
+            const siblings = el.parentElement.children;
+            for(let sib of siblings) {
+                sib.classList.remove('correct', 'wrong');
+            }
+
+            if(isCorrect) {
+                el.classList.add('correct');
+                triggerConfetti();
+            } else {
+                el.classList.add('wrong');
+            }
+        }
+
+        // 4. Bucket List
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            // Small pop effect
+            if(el.classList.contains('checked')) {
+                triggerConfetti(0.3); // small burst
+            }
+        }
+
+        // 5. Letter Typing
+        const letterContent = `My Dearest,\n\nI can’t believe it’s already been a month since we started this journey. It feels like I’ve known you forever, yet every day I learn something new and beautiful about you.\n\nThank you for being you. Thank you for the late-night talks, the laughter that hurts my stomach, and for making even the ordinary moments feel extraordinary. You have brought so much light into my life in such a short time.\n\nEven when we are apart, you are always in my thoughts. I cherish every memory we've made so far, and I am so excited for all the memories we have yet to create.\n\nHere's to us, to this past month, and to many, many more.\n\nHappy 1st Monthsary!\n\nAlways yours,\nTenzing Jangsel`;
+        
+        const letterContainer = document.getElementById('letterContainer');
+        const readBtn = document.getElementById('readBtn');
+        let isTyping = false;
+
+        readBtn.addEventListener('click', () => {
+            if(isTyping || letterContainer.innerText.length > 5) return;
+            isTyping = true;
+            readBtn.style.opacity = '0';
+            
+            let i = 0;
+            function typeChar() {
+                if(i < letterContent.length) {
+                    const char = letterContent.charAt(i);
+                    letterContainer.innerHTML += char === '\n' ? '<br>' : char;
+                    i++;
+                    // Scroll to bottom as it types
+                    letterContainer.scrollTop = letterContainer.scrollHeight;
+                    setTimeout(typeChar, 30);
+                }
+            }
+            typeChar();
+        });
+
+
+        // --- EFFECTS ---
+
+        // BG Hearts
+        const heartsContainer = document.getElementById('bgHearts');
+        function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
+            heart.classList.add('bg-heart');
             heart.innerHTML = Math.random() < 0.5 ? '❤' : '✨';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
             heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
-            document.getElementById('heart-bg').appendChild(heart);
-            setTimeout(() => heart.remove(), 13000);
+            heartsContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 12000);
         }
-        setInterval(createBgHeart, 1000);
+        setInterval(createHeart, 800);
 
-        // Confetti Engine
+        // Confetti
         const canvas = document.getElementById("confetti-canvas");
         const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
         let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function fireConfetti() {
-            for (let i = 0; i < 100; i++) {
+        function triggerConfetti(intensity = 1) {
+            const count = 100 * intensity;
+            for (let i = 0; i < count; i++) {
                 particles.push({
                     x: canvas.width / 2,
                     y: canvas.height / 2,
-                    vx: Math.random() * 10 - 5,
-                    vy: Math.random() * 10 - 5,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    size: Math.random() * 5 + 2,
-                    life: 100
+                    vx: (Math.random() - 0.5) * 15,
+                    vy: (Math.random() - 0.5) * 15,
+                    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                    size: Math.random() * 6 + 2,
+                    life: 150
                 });
             }
-            requestAnimationFrame(updateConfetti);
+            animateConfetti();
         }
 
-        function updateConfetti() {
+        function animateConfetti() {
+            if(particles.length === 0) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
                 p.vy += 0.2; // Gravity
                 p.life--;
+                
                 ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, p.size, p.size);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
                 if (p.life <= 0) {
                     particles.splice(i, 1);
                     i--;
                 }
             }
-            if (particles.length > 0) requestAnimationFrame(updateConfetti);
+            requestAnimationFrame(animateConfetti);
         }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
 
         // Music
         const musicBtn = document.getElementById('musicBtn');
-        const bgMusic = document.getElementById('bgMusic');
-        let isPlaying = false;
-        musicBtn.onclick = () => {
-            if (isPlaying) {
-                bgMusic.pause();
-                musicBtn.innerText = '🎵';
+        const audio = document.getElementById('bgMusic');
+        let playing = false;
+        
+        musicBtn.addEventListener('click', () => {
+            if(playing) {
+                audio.pause();
+                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
             } else {
-                bgMusic.play().catch(e => console.log(e));
-                musicBtn.innerText = '⏸';
+                audio.play().catch(e => console.log("Audio interaction needed"));
+                musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
-            isPlaying = !isPlaying;
-        };
+            playing = !playing;
+        });
 
     </script>
 </body>
