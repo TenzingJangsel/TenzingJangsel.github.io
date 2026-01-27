@@ -87,6 +87,43 @@
             100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
+        /* --- START OVERLAY --- */
+        .start-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease;
+        }
+        .start-overlay h1 {
+            font-family: var(--font-script);
+            font-size: 4rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(255,255,255,0.8);
+            animation: pulseText 2s infinite ease-in-out;
+            text-align: center;
+        }
+        .start-overlay p {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        @keyframes pulseText {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* --- SLIDER SYSTEM --- */
         .slider-viewport {
             width: 100vw;
@@ -516,6 +553,12 @@
 </head>
 <body>
 
+    <!-- CLICK TO START OVERLAY -->
+    <div class="start-overlay" id="startOverlay">
+        <h1>Happy 1st Month! ❤️</h1>
+        <p>Click anywhere to begin our journey...</p>
+    </div>
+
     <!-- Animated Background -->
     <div class="animated-bg">
         <div class="orb orb-1"></div>
@@ -530,7 +573,7 @@
     <!-- Controls -->
     <div class="music-label">Lover by Taylor Swift 💗</div>
     <div class="music-toggle" id="musicBtn"><i class="fas fa-music"></i></div>
-    <audio id="bgMusic" loop autoplay>
+    <audio id="bgMusic" loop>
         <source src="lover.mp3" type="audio/mpeg">
         <!-- Fallback source that sounds romantic if the file isn't there -->
         <source src="https://cdn.pixabay.com/download/audio/2023/05/16/audio_4966779422.mp3?filename=romantic-piano-150654.mp3" type="audio/mpeg">
@@ -928,19 +971,20 @@
         audio.volume = 0.6; // Updated to 60%
         let playing = false;
         
-        // Attempt autoplay on load
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
+        // --- START OVERLAY LOGIC ---
+        const overlay = document.getElementById('startOverlay');
+        overlay.addEventListener('click', () => {
+            audio.play().then(() => {
                 playing = true;
                 musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            })
-            .catch(error => {
-                console.log("Autoplay prevented. User interaction needed.");
-                playing = false;
-                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            });
-        }
+            }).catch(e => console.error("Could not play audio:", e));
+            
+            // Fade out overlay
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 800); // Wait for transition
+        });
         
         musicBtn.addEventListener('click', () => {
             if(playing) {
