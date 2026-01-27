@@ -3,189 +3,718 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenzing Jangsel Dorjee - High schooler</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts (Cormorant Garamond & Inter) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Happy 1st Month!</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Apply the classic font family as the base */
+        /* --- [EDITABLE] Color Palette & Settings --- */
+        :root {
+            --primary-color: #d46a6a;       
+            --secondary-color: #5a4a42;     
+            --bg-gradient-start: #fff1eb;   
+            --bg-gradient-end: #ace0f9;     
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --slide-transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+        }
+
+        /* --- Reset & Basic Setup --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; 
+            color: var(--secondary-color);
+            overflow: hidden; /* Prevent default scrolling */
+            height: 100vh;
+            width: 100vw;
         }
-        /* Custom style for the left panel's background image */
-        .bg-panel {
-            background-image: url('https://i.imgur.com/nN7JxgF.jpeg');
-            background-size: cover;
-            background-position: center;
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        /* Custom font for the main greeting title */
-        .font-times {
-            font-family: 'Times New Roman', Times, serif;
+
+        /* --- Floating Hearts Animation Background --- */
+        .heart-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
         }
-        /* Styles for the modal */
-        .modal {
-            transition: opacity 0.25s ease;
+        .floating-heart {
+            position: absolute;
+            bottom: -10vh;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+            animation: floatUp linear infinite;
+            text-shadow: 0 0 5px rgba(255, 192, 203, 0.5);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* --- SLIDER STRUCTURE --- */
+        .slider-viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .slider-track {
+            display: flex;
+            height: 100%;
+            width: 600vw; /* 6 Slides total (Removed one) */
+            transition: var(--slide-transition);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-y: auto; /* Allow internal scrolling for small screens */
+        }
+
+        /* Inner container for slide content */
+        .slide-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            padding: 40px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+            scrollbar-width: thin; /* Firefox */
+        }
+
+        /* Active slide animation */
+        .slide.active .slide-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary-color);
+        }
+        h1 { font-size: 4rem; margin-bottom: 10px; text-shadow: 2px 2px 0px rgba(255,255,255,0.8); }
+        h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; }
+
+        /* --- Custom UI Elements --- */
+        
+        /* 1. Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .polaroid {
+            background: white;
+            padding: 10px 10px 35px 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: rotate(var(--rotation));
+            transition: all 0.3s;
+        }
+        .polaroid:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 10; }
+        .polaroid img { width: 100%; height: 200px; object-fit: cover; }
+        .polaroid-caption { font-family: 'Dancing Script'; font-size: 1.4rem; color: #555; margin-top: 10px; }
+
+        /* 2. Interactive Love Meter */
+        .love-meter-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .heart-container {
+            width: 150px;
+            height: 150px;
+            background: #eee;
+            position: relative;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>") no-repeat center;
+            -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>") no-repeat center;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+        }
+        .heart-fill {
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, #ff416c, #ff4b2b);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transition: height 0.2s ease;
+        }
+        .meter-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(212, 106, 106, 0.4);
+            transition: transform 0.1s;
+        }
+        .meter-btn:active { transform: scale(0.95); }
+
+        /* 3. Date Generator */
+        .date-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative; /* Needed for absolute positioning of maybe-popup */
+        }
+        #date-result { font-size: 1.3rem; font-weight: bold; color: #5a4a42; min-height: 60px; display: flex; align-items: center; justify-content: center;}
+        
+        /* Popup for Date Generator */
+        .maybe-popup {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+        }
+        .maybe-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* 4. Reasons Grid */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+        .reason-card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .reason-card:hover { transform: translateY(-5px); }
+
+        /* 5. Letter */
+        .letter-content {
+            font-family: 'Sacramento', cursive;
+            font-size: 1.6rem; /* Slightly smaller to fit longer text */
+            line-height: 1.5;
+            color: #444;
+            white-space: pre-wrap;
+            min-height: 200px;
+            text-align: left;
+            padding: 20px;
+            background: #fffcf8;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+            border-radius: 5px;
+        }
+
+        /* --- Navigation Controls --- */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 100;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: var(--primary-color); color: white; transform: translateY(-50%) scale(1.1); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+        .nav-btn:disabled { opacity: 0.5; cursor: default; }
+
+        .pagination {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot.active { background: white; transform: scale(1.2); }
+
+        /* --- Music Control --- */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .nav-btn { width: 40px; height: 40px; }
+            .slide { padding: 15px; }
+            .slide-content { padding: 25px; }
+            .prev-btn { left: 10px; }
+            .next-btn { right: 10px; }
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-300">
+<body>
 
-    <!-- Main container -->
-    <div class="min-h-screen flex flex-col lg:flex-row">
+    <!-- Background Elements -->
+    <div class="heart-bg" id="heart-bg"></div>
+    <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
 
-        <!-- Left Panel (Image and Name) -->
-        <div class="lg:w-2/5 w-full bg-panel text-white relative flex flex-col items-center justify-center p-8 h-64 lg:h-screen lg:fixed">
-            <!-- Overlay for better text readability -->
-            <div class="absolute inset-0 bg-black opacity-50"></div>
+    <!-- Music Control -->
+    <div class="music-control" id="musicBtn" title="Play Music">🎵</div>
+    <audio id="bgMusic" loop>
+        <source src="" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation -->
+    <button class="nav-btn prev-btn" id="prevBtn" onclick="moveSlide(-1)">❮</button>
+    <button class="nav-btn next-btn" id="nextBtn" onclick="moveSlide(1)">❯</button>
+    <div class="pagination" id="pagination"></div>
+
+    <!-- MAIN SLIDER -->
+    <div class="slider-viewport">
+        <div class="slider-track" id="track">
             
-            <div class="relative z-10 text-center">
-                <!-- Profile Picture -->
-                <img 
-                    src="https://lh3.googleusercontent.com/a/ACg8ocKA_3zOrzsoO9gp87YypGQ7SMGjjRa3I8cCTp15WhSHy4sEaVvY=s576-c-no" 
-                    alt="Tenzing Jangsel Dorjee" 
-                    class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto border-4 border-white shadow-lg"
-                    onerror="this.onerror=null; this.src='https://placehold.co/150x150/cccccc/333333?text=Error';"
-                >
-                <!-- Greeting Text -->
-                <h2 class="text-3xl md:text-4xl font-bold mt-6 font-times">Hi! I'm Tenzing Jangsel Dorjee.</h2>
+            <!-- SLIDE 1: INTRO -->
+            <div class="slide active">
+                <div class="slide-content">
+                    <h1>Happy 1st Month!</h1>
+                    <p style="font-size: 1.4rem; color: #5a4a42;">
+                        30 Days.<br>720 Hours.<br>43,200 Minutes.
+                    </p>
+                    <p>And every single second has been better because you were in it. ❤️</p>
+                    <div style="margin-top:20px; font-size: 3rem;">💑</div>
+                    <p style="font-size: 0.9rem; margin-top: 20px; opacity: 0.7;">(Use the arrows or swipe to explore)</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Right Panel (Content) -->
-        <main class="lg:w-3/5 w-full lg:ml-[40%] p-8 sm:p-12 md:p-16">
-            <div class="max-w-3xl mx-auto">
-                
-                <!-- Introduction Section -->
-                <section class="mb-12">
-                    <h1 class="text-4xl sm:text-5xl font-bold text-white mb-6">
-                        I'm a highschooler at The Royal Academy, Paro.
-                    </h1>
-                    <div class="space-y-4 text-xl text-slate-400 leading-relaxed">
-                        <p>
-                            I'm passionate about technology and science, and I'm always looking for new challenges to tackle. I enjoy learning how things work, from complex code to the vastness of space.
-                        </p>
-                        <p>
-                           My goal is to use my skills in problem-solving and analysis to contribute to meaningful projects. I'm particularly interested in fields where I can apply data analysis and programming. My interests also span topics like machine learning, physics, and software development.
-                        </p>
-                        <p>
-                            Currently, I'm focused on building my foundational knowledge and working on personal projects to expand my skills.
-                        </p>
+            <!-- SLIDE 2: PHOTO GALLERY (RENAMED) -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Gallery</h2>
+                    <div class="photo-grid">
+                        <!-- [EDITABLE] Images - Removed Captions as requested -->
+                        <div class="polaroid" style="--rotation: -3deg;">
+                            <img src="1.jpg" alt="Memory 1">
+                            <div class="polaroid-caption"></div>
+                        </div>
+                        <div class="polaroid" style="--rotation: 2deg;">
+                            <img src="2.jpg" alt="Memory 2">
+                            <div class="polaroid-caption"></div>
+                        </div>
+                        <div class="polaroid" style="--rotation: -2deg;">
+                            <img src="3.jpg" alt="Memory 3">
+                            <div class="polaroid-caption"></div>
+                        </div>
                     </div>
-                </section>
-
-                <!-- CV Button -->
-                <section class="mb-16">
-                    <a href="https://drive.google.com/file/d/1DzgODhF8hM0ZgxtmN5hl2XjTtlK4qU5S/view?usp=sharing" target="_blank" class="inline-block bg-transparent hover:bg-sky-900 text-sky-300 font-semibold py-3 px-8 border border-sky-400 hover:text-white rounded-lg shadow-sm transition-all duration-300 ease-in-out transform hover:-translate-y-1 text-lg">
-                        View CV
-                    </a>
-                </section>
-
-                <!-- Projects Section -->
-                <section class="mb-16">
-                    <h3 class="text-3xl font-bold text-white mb-2">See below for some of my recent projects!</h3>
-                    <p class="text-slate-500 mb-8 text-lg">Click on the images for more information.</p>
-
-                    <!-- Project Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        
-                        <!-- Project Card 1 -->
-                        <a href="https://drive.google.com/file/d/1RSYglKujSyfEi5HqjsfkX43klBuGYrUD/view?usp=sharing" target="_blank" class="group block bg-slate-800 rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:shadow-sky-800/40 hover:scale-105">
-                            <img 
-                                src="https://i.imgur.com/zbzESpK.jpeg" 
-                                alt="Project Panoptes" 
-                                class="w-full h-48 object-cover"
-                            >
-                            <div class="p-6">
-                                <h4 class="font-bold text-2xl text-white mb-2">Project Panoptes</h4>
-                                <p class="text-slate-400 text-lg">A Project to Discover ExoPlanets</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Project Card 2 -->
-                        <a href="https://drive.google.com/file/d/1VvjJxSPQ4A84bQzQlQsa5rUztGOAhH8A/view?usp=sharing" target="_blank" class="group block bg-slate-800 rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:shadow-sky-800/40 hover:scale-105">
-                            <img 
-                                src="https://i.imgur.com/ZSntBbp.jpeg" 
-                                alt="Project Blood Moon" 
-                                class="w-full h-48 object-cover"
-                                onerror="this.onerror=null; this.src='https://placehold.co/600x400/cccccc/333333?text=Image+Error';"
-                            >
-                            <div class="p-6">
-                                <h4 class="font-bold text-2xl text-white mb-2">Blood Moon</h4>
-                                <p class="text-slate-400 text-lg">Blood Moon White Paper</p>
-                            </div>
-                        </a>
-                        
-                    </div>
-                </section>
-
-                <!-- Social Media Section -->
-                <section class="pt-8 border-t border-slate-700">
-                    <h3 class="text-3xl font-bold text-white mb-6 text-center">Connect With Me</h3>
-                    <div class="flex justify-center items-center space-x-6">
-                        <!-- GitHub Icon -->
-                        <a href="https://github.com/TenzingJangsel" target="_blank" class="text-slate-400 hover:text-sky-300 transition-colors duration-300" aria-label="GitHub">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <!-- LinkedIn Icon -->
-                        <a href="javascript:void(0)" onclick="openModal()" class="text-slate-400 hover:text-sky-300 transition-colors duration-300" aria-label="LinkedIn">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                            </svg>
-                        </a>
-                        <!-- X (Twitter) Icon -->
-                        <a href="#" target="_blank" class="text-slate-400 hover:text-sky-300 transition-colors duration-300" aria-label="X formerly Twitter">
-                             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </section>
-
+                </div>
             </div>
-        </main>
 
-    </div>
+            <!-- SLIDE 3: LOVE METER GAME -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Love Meter ❤️</h2>
+                    <p>How much do I love you? Keep tapping to find out!</p>
+                    
+                    <div class="love-meter-wrapper">
+                        <div class="heart-container">
+                            <div class="heart-fill" id="heartFill"></div>
+                        </div>
+                        <h3 id="lovePercent">0%</h3>
+                        <button class="meter-btn" id="pumpBtn">Tap Me! 👇</button>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Modal Structure -->
-    <div id="modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 opacity-0 pointer-events-none">
-        <div class="bg-slate-800 rounded-lg shadow-2xl p-8 max-w-sm w-full mx-4 text-center">
-            <h3 class="text-2xl font-bold text-white mb-4" style="font-family: 'Times New Roman', Times, serif;">Not Available</h3>
-            <p class="text-slate-400 mb-6 text-lg">My LinkedIn profile is not available at the moment. Please check back later!</p>
-            <button onclick="closeModal()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">
-                Close
-            </button>
+            <!-- SLIDE 4: QUIZ & DATE GENERATOR -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Fun & Games</h2>
+                    
+                    <!-- Date Generator -->
+                    <div class="date-card">
+                        <h3>Next Date Idea? 🎲</h3>
+                        <p>Can't decide what to do? Let fate decide!</p>
+                        <div id="date-result">❓</div>
+                        <div id="maybe-msg" class="maybe-popup">Maybe... one day! ✈️😅</div>
+                        <button class="meter-btn" onclick="generateDate()" style="padding: 10px 20px; font-size: 1rem;">Spin!</button>
+                    </div>
+
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">
+
+                    <!-- Mini Quiz -->
+                    <div style="text-align: left;">
+                        <h3>Mini Quiz: Do you know me?</h3>
+                        <p style="margin-bottom: 5px;">What is my favorite food?</p>
+                        <select id="quiz-food" style="padding: 5px; width: 100%; margin-bottom: 10px;">
+                            <option>Select...</option>
+                            <option value="wrong">Momos</option>
+                            <option value="wrong">Samyang</option>
+                            <option value="wrong">KFC</option>
+                            <option value="correct">Mama Noodles with Wai Wai</option>
+                        </select>
+                        <button class="meter-btn" onclick="checkQuiz()" style="padding: 5px 15px; font-size: 0.9rem;">Check</button>
+                        <span id="quiz-msg" style="margin-left: 10px; font-weight: bold;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: REASONS WHY -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Why I Love You</h2>
+                    <div class="reasons-grid">
+                        <div class="reason-card">
+                            <div style="font-size:2rem">🥰</div>
+                            <p>Your beautiful smile</p>
+                        </div>
+                        <div class="reason-card">
+                            <div style="font-size:2rem">🤣</div>
+                            <p>The way you laugh</p>
+                        </div>
+                        <div class="reason-card">
+                            <div style="font-size:2rem">🛡️</div>
+                            <p>I feel safe with you</p>
+                        </div>
+                        <div class="reason-card">
+                            <div style="font-size:2rem">🎮</div>
+                            <p>You're my player 2</p>
+                        </div>
+                        <div class="reason-card">
+                            <div style="font-size:2rem">🍕</div>
+                            <p>We share food</p>
+                        </div>
+                        <div class="reason-card">
+                            <div style="font-size:2rem">✨</div>
+                            <p>You are simply you</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: LETTER -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>A Letter For You 💌</h2>
+                    <div class="letter-content" id="typewriter-text"></div>
+                    <button class="meter-btn" id="startTypeBtn" style="margin-top: 20px;">Read Letter</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Get the modal element
-        const modal = document.getElementById('modal');
+        // --- 1. GLOBAL SETTINGS ---
+        // UPDATED: Reduced from 7 to 6 since we removed one slide
+        const totalSlides = 6;
+        let currentSlide = 0;
+        const track = document.getElementById('track');
+        const pagination = document.getElementById('pagination');
+        const slides = document.querySelectorAll('.slide');
 
-        // Function to open the modal
-        function openModal() {
-            modal.classList.remove('opacity-0', 'pointer-events-none');
+        // --- 2. SLIDER LOGIC ---
+        // Create Dots
+        for(let i=0; i<totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i===0) dot.classList.add('active');
+            dot.onclick = () => goToSlide(i);
+            pagination.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlide() {
+            track.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            
+            // Update Active Class for animations
+            slides.forEach(s => s.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+
+            // Update Dots
+            dots.forEach(d => d.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
+
+            // Disable buttons at ends
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
         }
 
-        // Function to close the modal
-        function closeModal() {
-            modal.classList.add('opacity-0', 'pointer-events-none');
+        function moveSlide(dir) {
+            if (dir === 1 && currentSlide < totalSlides - 1) currentSlide++;
+            else if (dir === -1 && currentSlide > 0) currentSlide--;
+            updateSlide();
         }
 
-        // Close modal if user clicks outside of the modal content
-        window.addEventListener('click', function(event) {
-            if (event.target == modal) {
-                closeModal();
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+        }
+
+        // Keyboard Nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') moveSlide(1);
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+        });
+
+        // Initialize
+        updateSlide();
+
+        // --- 3. LOVE METER GAME ---
+        let loveLevel = 0;
+        const heartFill = document.getElementById('heartFill');
+        const lovePercent = document.getElementById('lovePercent');
+        const pumpBtn = document.getElementById('pumpBtn');
+
+        pumpBtn.addEventListener('click', () => {
+            if (loveLevel >= 100) return;
+            
+            loveLevel += Math.floor(Math.random() * 15) + 5; // Add 5-20%
+            if (loveLevel > 100) loveLevel = 100;
+            
+            heartFill.style.height = `${loveLevel}%`;
+            lovePercent.innerText = `${loveLevel}%`;
+
+            createFloatingEmoji(pumpBtn);
+
+            if (loveLevel === 100) {
+                lovePercent.innerText = "MAX LOVE! ❤️";
+                pumpBtn.innerText = "YAY! 🎉";
+                fireConfetti();
+                fireConfetti();
             }
         });
-    </script>
 
+        function createFloatingEmoji(target) {
+            const emojis = ['❤️', '💖', '😍', '🥰', '😘'];
+            const el = document.createElement('div');
+            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.position = 'absolute';
+            el.style.left = target.getBoundingClientRect().left + (target.offsetWidth/2) + 'px';
+            el.style.top = target.getBoundingClientRect().top + 'px';
+            el.style.fontSize = '24px';
+            el.style.pointerEvents = 'none';
+            el.style.transition = 'all 1s ease-out';
+            el.style.zIndex = '1000';
+            document.body.appendChild(el);
+
+            setTimeout(() => {
+                el.style.transform = `translate(${Math.random()*40 - 20}px, -100px) scale(1.5)`;
+                el.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        // --- 4. DATE IDEA GENERATOR ---
+        const dateIdeas = [
+            "Movie Marathon Night 🍿",
+            "Picnic in the Park 🧺",
+            "Cook a new recipe together 🍝",
+            "Stargazing 🌌",
+            "Karaoke Night 🎤",
+            "Visit a Museum 🏛️",
+            "Sunset Walk 🌅",
+            "Build a Blanket Fort 🏰"
+        ];
+        function generateDate() {
+            const result = document.getElementById('date-result');
+            let count = 0;
+            const interval = setInterval(() => {
+                result.innerText = dateIdeas[Math.floor(Math.random() * dateIdeas.length)];
+                count++;
+                if(count > 10) {
+                    clearInterval(interval);
+                    result.style.color = "#d46a6a";
+                    result.style.transform = "scale(1.2)";
+                    setTimeout(() => result.style.transform = "scale(1)", 200);
+                    
+                    // Show Maybe Popup
+                    setTimeout(() => {
+                        const popup = document.getElementById('maybe-msg');
+                        popup.classList.add('show');
+                        setTimeout(() => popup.classList.remove('show'), 2500); // Hide after 2.5s
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // --- 5. QUIZ LOGIC ---
+        function checkQuiz() {
+            const val = document.getElementById('quiz-food').value;
+            const msg = document.getElementById('quiz-msg');
+            if(val === 'correct') {
+                msg.innerText = "Correct! You know me so well! 😘";
+                msg.style.color = "green";
+                fireConfetti();
+            } else if (val === 'wrong') {
+                msg.innerText = "Oops! Try again! 😅";
+                msg.style.color = "red";
+            }
+        }
+
+        // --- 6. TYPEWRITER ---
+        // UPDATED LETTER TEXT with "Tenzing Jangsel" and longer content
+        const letterText = `My Dearest,\n\nI can’t believe it’s already been a month since we started this journey. It feels like I’ve known you forever, yet every day I learn something new and beautiful about you.\n\nThank you for being you. Thank you for the late-night talks, the laughter that hurts my stomach, and for making even the ordinary moments feel extraordinary. You have brought so much light into my life in such a short time.\n\nEven when we are apart, you are always in my thoughts. I cherish every memory we've made so far, and I am so excited for all the memories we have yet to create.\n\nHere's to us, to this past month, and to many, many more.\n\nHappy 1st Monthsary!\n\nAlways yours,\nTenzing Jangsel`;
+        
+        const typeBtn = document.getElementById('startTypeBtn');
+        const typeDest = document.getElementById('typewriter-text');
+        let typing = false;
+
+        typeBtn.addEventListener('click', () => {
+            if(typing) return;
+            typing = true;
+            typeBtn.style.display = 'none';
+            let i = 0;
+            function type() {
+                if (i < letterText.length) {
+                    typeDest.innerHTML += letterText.charAt(i) === '\n' ? '<br>' : letterText.charAt(i);
+                    i++;
+                    setTimeout(type, 50);
+                }
+            }
+            type();
+        });
+
+        // --- 7. BACKGROUND EFFECTS ---
+        // Floating Hearts
+        function createBgHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = Math.random() < 0.5 ? '❤' : '✨';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            document.getElementById('heart-bg').appendChild(heart);
+            setTimeout(() => heart.remove(), 13000);
+        }
+        setInterval(createBgHeart, 1000);
+
+        // Confetti Engine
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        function fireConfetti() {
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: Math.random() * 10 - 5,
+                    vy: Math.random() * 10 - 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 5 + 2,
+                    life: 100
+                });
+            }
+            requestAnimationFrame(updateConfetti);
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2; // Gravity
+                p.life--;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            if (particles.length > 0) requestAnimationFrame(updateConfetti);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Music
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+        musicBtn.onclick = () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.innerText = '🎵';
+            } else {
+                bgMusic.play().catch(e => console.log(e));
+                musicBtn.innerText = '⏸';
+            }
+            isPlaying = !isPlaying;
+        };
+
+    </script>
 </body>
 </html>
